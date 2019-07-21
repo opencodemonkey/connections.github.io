@@ -1,4 +1,0 @@
-This is a Brave Rewards publisher verification file.
-
-Domain: opencodemonkey.github.io
-Token: cde8bc4c8a7c2c53b7c15b26e7d3822cfe92b75e2e989c874cbaa4f934c36f68
