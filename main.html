@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+</head>
+<body>
+    <header>
+        <div class="navbar navbar-dark bg-dark box-shadow">
+            <div class="container d-flex justify-content-between">
+                <a href="#" class="navbar-brand d-flex align-items-center">
+                    <strong>Ferramentas Estatísticas</strong>
+                </a>
+            </div>
+        </div>
+    </header>
+    <main role="main">
+
+        <div class="container" style="margin-top: 25px;">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">
+                        Dados de Entrada
+                    </button>
+                    <button class="nav-link" id="nav-frequencies-tab" data-bs-toggle="tab" data-bs-target="#nav-frequencies" type="button" role="tab" aria-controls="nav-frequencies" aria-selected="false">
+                        Tabela de Frequências
+                    </button>
+                    <button class="nav-link" id="nav-results-tab" data-bs-toggle="tab" data-bs-target="#nav-results" type="button" role="tab" aria-controls="nav-results" aria-selected="false">
+                        Resultados
+                    </button>
+                    <button class="nav-link" id="nav-box-tab" data-bs-toggle="tab" data-bs-target="#nav-box" type="button" role="tab" aria-controls="nav-box" aria-selected="false">
+                        Diagrama(s) de Caixa
+                    </button>
+                    <button class="nav-link" id="nav-regression-tab" data-bs-toggle="tab" data-bs-target="#nav-regression" type="button" role="tab" aria-controls="nav-regression" aria-selected="false">
+                        Regressão Linear
+                    </button>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <form style="margin-top: 0px;padding: 50px;">
+
+                        <div class="mb-3 row">
+                            <label class="col-sm-2 col-form-label">Tipo Dados</label>
+                            <div class="col-sm-10">
+                                <div class="form-check form-check-inline" style="margin-top: 7px;">
+                                    <input class="form-check-input" type="radio" name="population" id="population" value="population" checked>
+                                    <label class="form-check-label" for="population">População</label>
+                                </div>
+                                <div class="form-check form-check-inline" style="margin-top: 7px;">
+                                    <input class="form-check-input" type="radio" name="population" id="sanple" value="sample">
+                                    <label class="form-check-label" for="sanple">Amostra</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="text" name="xLabel" id="xLabel" value="" class="form-control" placeholder="Variável X"/>
+                                    </th>
+                                    <th>
+                                        <input type="text" name="yLabel" id="yLabel" value="" class="form-control" placeholder="Variável Y"/>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="inputTBody"/>
+                        </table>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <button onclick="return addRow();" class="btn btn-outline-secondary">
+                                        Add Row
+                                    </button>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="mb-3 row">
+                            <button onclick="return calculateStats();" class="btn btn-primary btn-lg btn-block">
+                                Calcular
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane fade" id="nav-frequencies" role="tabpanel" aria-labelledby="nav-frequencies-tab">...</div>
+                <div class="tab-pane fade" id="nav-results" role="tabpanel" aria-labelledby="nav-results-tab">
+                    <div class="container" style="margin-top: 50px;">
+                        <h3>Estatísticas</h3>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Variável</th>
+                                <th>Número de Observações</th>
+                                <th>Soma</th>
+                                <th>Min</th>
+                                <th>Max</th>
+
+                                <th>Média</th>
+                                <th>Moda</th>
+                                <th>Mediana</th>
+                                <th>1º Quartil</th>
+                                <th>3º Quartil</th>
+                            </tr>
+                            </thead>
+                            <tbody id="basicStats">
+                            </tbody>
+                        </table>
+
+                        <h3>Percentis</h3>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Variável</th>
+                                <th>10 %</th>
+                                <th>20 %</th>
+                                <th>30 %</th>
+                                <th>40 %</th>
+                                <th>50 %</th>
+                                <th>60 %</th>
+                                <th>70 %</th>
+                                <th>80 %</th>
+                                <th>90 %</th>
+                            </tr>
+                            </thead>
+                            <tbody id="percentileStats">
+                            </tbody>
+                        </table>
+
+                        <h3>Dispersão</h3>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Variável</th>
+                                <th>Variancia</th>
+                                <th>Desvio Padrão</th>
+                                <th>Desvio Absoluto da Mediana</th>
+                                <th>Distância Interquartil</th>
+                            </tr>
+                            </thead>
+                            <tbody id="dispursionStats">
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-box" role="tabpanel" aria-labelledby="nav-box-tab">
+                    <div class="row" style="padding: 50px;">
+                        <div class="col">
+                            <figure class="highcharts-figure">
+                                <div id="boxPlotContainerX"></div>
+                            </figure>
+                        </div>
+                        <div class="col">
+                            <figure class="highcharts-figure">
+                                <div id="boxPlotContainerY"></div>
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-regression" role="tabpanel" aria-labelledby="nav-regression-tab">
+                    <div class="row" style="padding: 50px;">
+                        <h3>Comparação</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Correlação</th>
+                                    <th>Covariancia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="sampleCorrelation"></td>
+                                    <td id="sampleCovariance"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3>Regressão Linear</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>linerarRegression</th>
+                                    <th>linerarRegressionLine</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="linearRegression"></td>
+                                    <td id="linearRegressionLine"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="linearRegressionLineDiv">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+            crossorigin="anonymous"></script>
+
+    <script src="simple-statistics.js" type="text/javascript"></script>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<script>
+    function calculateStats() {
+        clearRows("basicStats");
+        clearRows("percentileStats");
+        clearRows("dispursionStats");
+
+        var xl = document.getElementById("xLabel").value;
+        var xa = Array.from(document.getElementsByName("x")).map(x => +x.value);
+        var ya = Array.from(document.getElementsByName("y")).map(x => +x.value);
+
+        report("X", xl, xa);
+        if (hasValues(ya) === true) {
+            var yl = document.getElementById("yLabel").value;
+            report("Y", yl, ya);
+
+            document.getElementById('sampleCorrelation').innerHTML = sampleCorrelation(xa, ya);
+            document.getElementById('sampleCovariance').innerHTML = sampleCovariance(xa, ya);
+
+            var sdata = [];
+            for (i = 0; i < xa.length; i++) {
+                sdata.push([xa[i], ya[i]]);
+            }
+            var lr = linearRegression(sdata);
+            document.getElementById('linearRegression').innerHTML = 'm = ' + lr.m + " ; b = " + lr.b;
+            document.getElementById('linearRegressionLine').innerHTML = linearRegressionLine(sdata);
+
+            drawRegressionLine(xa, ya, sdata);
+        }
+
+        document.getElementById("nav-results-tab").click();
+
+        return false;
+    }
+
+    function clearRows(id) {
+        var tbody = document.getElementById(id);
+        for (i = tbody.rows.length; i > 0; i--) {
+            tbody.deleteRow(i - 1);
+        }
+    }
+
+    function hasValues(arr) {
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i] !== 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function drawRegressionLine(vxa, vya, sdata) {
+
+        var r = linearRegression(sdata);
+        var rl = linearRegressionLine(r);
+        var minX = min(vxa);
+        var minY = rl(minX);
+        var maxX = max(vxa);
+        var maxY = rl(maxX);
+
+        Highcharts.chart('linearRegressionLineDiv', {
+            title: {
+                text: ''
+            },
+            xAxis: {
+                min: minX,
+                max: maxX,
+                title: { text: '' }
+            },
+            yAxis: {
+                min: min(vya),
+                max: max(vya),
+                title: { text: '' }
+            },
+            series: [{
+                type: 'line',
+                name: 'Linha de Regressão',
+                data: [[minX, minY], [maxX, maxY]],
+                marker: {
+                    enabled: false
+                },
+                states: {
+                    hover: {
+                        lineWidth: 0
+                    }
+                },
+                enableMouseTracking: false
+            }, {
+                type: 'scatter',
+                name: 'Observações',
+                data: sdata,
+                marker: {
+                    radius: 4
+                }
+            }]
+        });
+
+
+    }
+
+    function report(vi, vlabel, vdata) {
+        var trow = document.getElementById('basicStats').insertRow();
+        trow.insertCell().innerHTML = vlabel;
+        trow.insertCell().innerHTML = vdata.length;
+        trow.insertCell().innerHTML = sum(vdata);
+        trow.insertCell().innerHTML = min(vdata);
+        trow.insertCell().innerHTML = max(vdata);
+
+        trow.insertCell().innerHTML = mean(vdata);
+        trow.insertCell().innerHTML = mode(vdata);
+        trow.insertCell().innerHTML = median(vdata);
+        trow.insertCell().innerHTML = quantile(vdata, 0.25);
+        trow.insertCell().innerHTML = quantile(vdata, 0.75);
+
+        var prow = document.getElementById('percentileStats').insertRow();
+        prow.insertCell().innerHTML = vlabel;
+        prow.insertCell().innerHTML = quantile(vdata, 0.1);
+        prow.insertCell().innerHTML = quantile(vdata, 0.2);
+        prow.insertCell().innerHTML = quantile(vdata, 0.3);
+        prow.insertCell().innerHTML = quantile(vdata, 0.4);
+        prow.insertCell().innerHTML = quantile(vdata, 0.5);
+        prow.insertCell().innerHTML = quantile(vdata, 0.6);
+        prow.insertCell().innerHTML = quantile(vdata, 0.7);
+        prow.insertCell().innerHTML = quantile(vdata, 0.8);
+        prow.insertCell().innerHTML = quantile(vdata, 0.9);
+
+        var drow = document.getElementById('dispursionStats').insertRow();
+        drow.insertCell().innerHTML = vlabel;
+        drow.insertCell().innerHTML = document.getElementById('population').checked ? variance(vdata) : sampleVariance(vdata);
+        drow.insertCell().innerHTML = document.getElementById('population').checked ? standardDeviation(vdata) : sampleStandardDeviation(vdata);
+        drow.insertCell().innerHTML = medianAbsoluteDeviation(vdata);
+        drow.insertCell().innerHTML = interquartileRange(vdata);
+
+        Highcharts.chart('boxPlotContainer' + vi, {
+            chart: { type: 'boxplot' },
+            title: { text: '' },
+            legend: { enabled: false },
+            xAxis: {
+                categories: [vlabel],
+                title: { text: '' }
+            },
+            yAxis: {
+                title: { text: '' }
+            },
+
+            series: [{
+                name: 'Observations',
+                data: [
+                    [min(vdata), quantile(vdata, 0.25), median(vdata), quantile(vdata, 0.75), max(vdata)]
+                ]
+            }]
+
+        });
+    }
+
+    var tbody = document.getElementById("inputTBody");
+    var trash = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">\
+        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>\
+        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>\
+        </svg>';
+
+    function removeRow(b) {
+        var trow = b.parentElement.parentElement;
+        tbody.removeChild(trow);
+        return false;
+    }
+
+    function addRow() {
+        var trow = tbody.insertRow();
+        trow.insertCell().innerHTML = '<input type="number" name="x" value="" class="form-control"/>';
+        trow.insertCell().innerHTML = '<input type="number" name="y" value="" class="form-control"/>';
+        trow.insertCell().innerHTML = '<button onclick="removeRow(this);" class="btn btn-outline-danger">' + trash + '</button>';
+        return false;
+    }
+
+    for (i = 0; i < 3; i++) {
+        addRow();
+    }
+
+</script>
+
+</body>
+</html>
