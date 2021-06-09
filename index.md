@@ -1,13 +1,7 @@
-# Open Coder
+# Stuff that may be useful
 
-I love to code. I have many years of professional development experience.
-Here I will create and make available some projects based on ideas I've had and stuff I think is interresting and want to explore.
+## [Simple Statistics Tools](https://opencodemonkey.github.io/stats.html)
 
-## [Project Connections](https://opencodemonkey.github.io/connections/)
+A set of simple statistics tools to input raw data and get instant results.
+Should be easy to use and avoids all the complexity of tools such as SPSS or having to do all the calculations in excel.
 
-Keep track of your connections, make new ones and never miss an opportunity.
-
-
-## [Brave Web Browser](https://brave.com/ope894)
-
-While I have nothing to do with the brave web browser, I think it is a fantastic idea and a great implementation. Today users are more aware of privacy issues, but many times convenience of use speaks louder. Other times users are not entirely aware of the risks of surfing the web and the information that is collected and processed. Brave helps out tremendously. Give it a try.
