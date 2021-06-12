@@ -9,37 +9,41 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    <title lang="en">Statistics Tools</title>
 </head>
 <body>
     <header>
         <div class="navbar navbar-dark bg-dark box-shadow">
             <div class="container d-flex justify-content-between">
-                <a href="#" class="navbar-brand d-flex align-items-center">
-                    <strong>Ferramentas Estatísticas</strong>
+                <a href="index.html" class="navbar-brand d-flex align-items-center">
+                    <strong>OpenSource Code Monkey</strong>
                 </a>
+                <button class="navbar-toggler" type="button" onclick="window.location = 'stats.html';">
+                    <span lang="en">Statistics Tools</span>
+                </button>
             </div>
         </div>
     </header>
     <main role="main">
-
         <div class="container" style="margin-top: 25px;">
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">
-                        Dados de Entrada
+                        <span lang="en">Input Data</span>
                     </button>
-                    <button class="nav-link" id="nav-frequencies-tab" data-bs-toggle="tab" data-bs-target="#nav-frequencies" type="button" role="tab" aria-controls="nav-frequencies" aria-selected="false">
-                        Tabela de Frequências
+<!--
+                    <button class="nav-link disabled" id="nav-frequencies-tab" data-bs-toggle="tab" data-bs-target="#nav-frequencies" type="button" role="tab" aria-controls="nav-frequencies" aria-selected="false">
+                        <span lang="en">Frequency Table(s)</span>
                     </button>
-                    <button class="nav-link" id="nav-results-tab" data-bs-toggle="tab" data-bs-target="#nav-results" type="button" role="tab" aria-controls="nav-results" aria-selected="false">
-                        Resultados
+-->
+                    <button class="nav-link disabled" id="nav-results-tab" data-bs-toggle="tab" data-bs-target="#nav-results" type="button" role="tab" aria-controls="nav-results" aria-selected="false">
+                        <span lang="en">Results</span>
                     </button>
-                    <button class="nav-link" id="nav-box-tab" data-bs-toggle="tab" data-bs-target="#nav-box" type="button" role="tab" aria-controls="nav-box" aria-selected="false">
-                        Diagrama(s) de Caixa
+                    <button class="nav-link disabled" id="nav-box-tab" data-bs-toggle="tab" data-bs-target="#nav-box" type="button" role="tab" aria-controls="nav-box" aria-selected="false">
+                        <span lang="en">Box Diagram(s)</span>
                     </button>
-                    <button class="nav-link" id="nav-regression-tab" data-bs-toggle="tab" data-bs-target="#nav-regression" type="button" role="tab" aria-controls="nav-regression" aria-selected="false">
-                        Regressão Linear
+                    <button class="nav-link disabled" id="nav-regression-tab" data-bs-toggle="tab" data-bs-target="#nav-regression" type="button" role="tab" aria-controls="nav-regression" aria-selected="false">
+                        <span lang="en">Linear Regression</span>
                     </button>
                 </div>
             </nav>
@@ -48,15 +52,15 @@
                     <form style="margin-top: 0px;padding: 50px;">
 
                         <div class="mb-3 row">
-                            <label class="col-sm-2 col-form-label">Tipo Dados</label>
+                            <label class="col-sm-2 col-form-label" lang="en">Type of Data</label>
                             <div class="col-sm-10">
                                 <div class="form-check form-check-inline" style="margin-top: 7px;">
                                     <input class="form-check-input" type="radio" name="population" id="population" value="population" checked>
-                                    <label class="form-check-label" for="population">População</label>
+                                    <label class="form-check-label" for="population" lang="en">Population</label>
                                 </div>
                                 <div class="form-check form-check-inline" style="margin-top: 7px;">
                                     <input class="form-check-input" type="radio" name="population" id="sanple" value="sample">
-                                    <label class="form-check-label" for="sanple">Amostra</label>
+                                    <label class="form-check-label" for="sanple" lang="en">Sample</label>
                                 </div>
                             </div>
                         </div>
@@ -65,10 +69,10 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        <input type="text" name="xLabel" id="xLabel" value="" class="form-control" placeholder="Variável X"/>
+                                        <input type="text" name="xLabel" id="xLabel" value="" class="form-control" placeholder="Var X"/>
                                     </th>
                                     <th>
-                                        <input type="text" name="yLabel" id="yLabel" value="" class="form-control" placeholder="Variável Y"/>
+                                        <input type="text" name="yLabel" id="yLabel" value="" class="form-control" placeholder="Var Y"/>
                                     </th>
                                     <th></th>
                                 </tr>
@@ -78,49 +82,45 @@
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <button onclick="return addRow();" class="btn btn-outline-secondary">
-                                        Add Row
-                                    </button>
+                                    <button onclick="return addRow();" class="btn btn-outline-secondary" lang="en">Add Row</button>
                                 </tr>
                             </tbody>
                         </table>
 
                         <div class="mb-3 row">
-                            <button onclick="return calculateStats();" class="btn btn-primary btn-lg btn-block">
-                                Calcular
-                            </button>
+                            <button onclick="return calculateStats();" class="btn btn-primary btn-lg btn-block" lang="en">Calculate</button>
                         </div>
                     </form>
                 </div>
                 <div class="tab-pane fade" id="nav-frequencies" role="tabpanel" aria-labelledby="nav-frequencies-tab">...</div>
                 <div class="tab-pane fade" id="nav-results" role="tabpanel" aria-labelledby="nav-results-tab">
                     <div class="container" style="margin-top: 50px;">
-                        <h3>Estatísticas</h3>
+                        <h3 lang="en">Statistics</h3>
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>Variável</th>
-                                <th>Número de Observações</th>
-                                <th>Soma</th>
-                                <th>Min</th>
-                                <th>Max</th>
+                                <th lang="en">Variable</th>
+                                <th lang="en">Number of Observations</th>
+                                <th lang="en">Sum</th>
+                                <th lang="en">Min</th>
+                                <th lang="en">Max</th>
 
-                                <th>Média</th>
-                                <th>Moda</th>
-                                <th>Mediana</th>
-                                <th>1º Quartil</th>
-                                <th>3º Quartil</th>
+                                <th lang="en">Average</th>
+                                <th lang="en">Mode</th>
+                                <th lang="en">Mean</th>
+                                <th lang="en">1st Quantile</th>
+                                <th lang="en">3rd Quantile</th>
                             </tr>
                             </thead>
                             <tbody id="basicStats">
                             </tbody>
                         </table>
 
-                        <h3>Percentis</h3>
+                        <h3 lang="en">Percentiles</h3>
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>Variável</th>
+                                <th lang="en">Variable</th>
                                 <th>10 %</th>
                                 <th>20 %</th>
                                 <th>30 %</th>
@@ -136,21 +136,20 @@
                             </tbody>
                         </table>
 
-                        <h3>Dispersão</h3>
+                        <h3 lang="en">Dispersion</h3>
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>Variável</th>
-                                <th>Variancia</th>
-                                <th>Desvio Padrão</th>
-                                <th>Desvio Absoluto da Mediana</th>
-                                <th>Distância Interquartil</th>
+                                <th lang="en">Variable</th>
+                                <th lang="en">Variance</th>
+                                <th lang="en">Standard Deviation</th>
+                                <th lang="en">Median Absolute Deviation</th>
+                                <th lang="en">InterQuantile Range</th>
                             </tr>
                             </thead>
                             <tbody id="dispursionStats">
                             </tbody>
                         </table>
-
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-box" role="tabpanel" aria-labelledby="nav-box-tab">
@@ -169,12 +168,12 @@
                 </div>
                 <div class="tab-pane fade" id="nav-regression" role="tabpanel" aria-labelledby="nav-regression-tab">
                     <div class="row" style="padding: 50px;">
-                        <h3>Comparação</h3>
+                        <h3 lang="en">Similarity</h3>
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Correlação</th>
-                                    <th>Covariancia</th>
+                                    <th lang="en">Correlation</th>
+                                    <th lang="en">Covariance</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -185,7 +184,7 @@
                             </tbody>
                         </table>
 
-                        <h3>Regressão Linear</h3>
+                        <h3 lang="en">Linear Regression</h3>
                         <table class="table">
                             <thead>
                                 <tr>
@@ -221,6 +220,13 @@
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 <script>
+    function clearRows(id) {
+        var tbody = document.getElementById(id);
+        for (i = tbody.rows.length; i > 0; i--) {
+            tbody.deleteRow(i - 1);
+        }
+    }
+
     function calculateStats() {
         clearRows("basicStats");
         clearRows("percentileStats");
@@ -249,16 +255,13 @@
             drawRegressionLine(xa, ya, sdata);
         }
 
+        document.getElementById("nav-frequencies-tab").classList.remove("disabled");
+        document.getElementById("nav-results-tab").classList.remove("disabled");
+        document.getElementById("nav-box-tab").classList.remove("disabled");
+        document.getElementById("nav-regression-tab").classList.remove("disabled");
         document.getElementById("nav-results-tab").click();
 
         return false;
-    }
-
-    function clearRows(id) {
-        var tbody = document.getElementById(id);
-        for (i = tbody.rows.length; i > 0; i--) {
-            tbody.deleteRow(i - 1);
-        }
     }
 
     function hasValues(arr) {
@@ -295,7 +298,7 @@
             },
             series: [{
                 type: 'line',
-                name: 'Linha de Regressão',
+                name: 'Regression Line',
                 data: [[minX, minY], [maxX, maxY]],
                 marker: {
                     enabled: false
@@ -308,7 +311,7 @@
                 enableMouseTracking: false
             }, {
                 type: 'scatter',
-                name: 'Observações',
+                name: 'Observations',
                 data: sdata,
                 marker: {
                     radius: 4
@@ -394,10 +397,60 @@
         return false;
     }
 
-    for (i = 0; i < 10; i++) {
+    for (i = 0; i < 3; i++) {
         addRow();
     }
 
+    function translate(text) {
+        if (text === "Statistics Tools") return "Ferramentas Estatísticas";
+        if (text === "Input Data") return "Dados de Entrada";
+        if (text === "Frequency Table(s)") return "Tabela(s) de Frequência";
+        if (text === "Results") return "Resultados";
+        if (text === "Box Diagram(s)") return "Diagrama(s) de Caixa";
+        if (text === "Linear Regression") return "Regressão Linear";
+        if (text === "Type of Data") return "Tipo Dados";
+        if (text === "Population") return "População";
+        if (text === "Sample") return "Amostra";
+        if (text === "Add Row") return "Adicionar Linha";
+        if (text === "Calculate") return "Calcular";
+        if (text === "Statistics") return "Estatísticas";
+        if (text === "Variable") return "Variável";
+        if (text === "Number of Observations") return "Número de Observações";
+        if (text === "Sum") return "Soma";
+        if (text === "Min") return "Min";
+        if (text === "Max") return "Max";
+        if (text === "Average") return "Média";
+        if (text === "Mode") return "Moda";
+        if (text === "Mean") return "Mediana";
+        if (text === "1st Quantile") return "1º Quartil";
+        if (text === "3rd Quantile") return "3º Quartil";
+        if (text === "Percentiles") return "Percentis";
+        if (text === "Dispersion") return "Dispersão";
+        if (text === "Variance") return "Variancia";
+        if (text === "Standard Deviation") return "Desvio Padrão";
+        if (text === "Median Absolute Deviation") return "Desvio Absoluto da Mediana";
+        if (text === "InterQuantile Range") return "Distância Interquartil";
+        if (text === "Similarity") return "Comparação";
+        if (text === "Correlation") return "Correlação";
+        if (text === "Covariance") return "Covariancia";
+        if (text === "Linear Regression") return "Regressão Linear";
+        if (text === "") return "";
+
+        alert("No translation for [" + text + "]");
+        return text;
+    }
+
+    if (navigator.language === "pt") {
+        document.querySelectorAll("[lang]").forEach((element) => {
+            if (element.parentElement != null && element.text != null) {
+                element.text = translate(element.text);
+            } else if (element.parentElement != null && element.textContent != null) {
+                element.textContent = translate(element.textContent);
+            } else if (element.parentElement != null) {
+                alert("Xpto: " + element.textContent);
+            }
+        });
+    }
 </script>
 
 </body>
