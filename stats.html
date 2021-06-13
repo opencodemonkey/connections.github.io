@@ -31,11 +31,9 @@
                     <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">
                         <span lang="en">Input Data</span>
                     </button>
-<!--
                     <button class="nav-link disabled" id="nav-frequencies-tab" data-bs-toggle="tab" data-bs-target="#nav-frequencies" type="button" role="tab" aria-controls="nav-frequencies" aria-selected="false">
                         <span lang="en">Frequency Table(s)</span>
                     </button>
--->
                     <button class="nav-link disabled" id="nav-results-tab" data-bs-toggle="tab" data-bs-target="#nav-results" type="button" role="tab" aria-controls="nav-results" aria-selected="false">
                         <span lang="en">Results</span>
                     </button>
@@ -49,7 +47,7 @@
             </nav>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                    <form style="margin-top: 0px;padding: 50px;">
+                    <form style="margin-top: 0px;padding: 50px;" onsubmit="return calculateStats();">
 
                         <div class="mb-3 row">
                             <label class="col-sm-2 col-form-label" lang="en">Type of Data</label>
@@ -65,6 +63,26 @@
                             </div>
                         </div>
 
+                        <div class="mb-3 row">
+                            <label class="col-sm-2 col-form-label" lang="en">Input Mode</label>
+                            <div class="col-sm-10">
+                                <div class="form-check form-check-inline" style="margin-top: 7px;">
+                                    <input class="form-check-input" type="radio" name="rawData" id="rawData" value="rawData" checked onclick="initRawDataFrequencies();">
+                                    <label class="form-check-label" for="rawData" lang="en">Raw Data</label>
+                                </div>
+                                <div class="form-check form-check-inline" style="margin-top: 7px;">
+                                    <input class="form-check-input" type="radio" name="rawData" id="frequencyDataAbsolute" value="frequencyDataAbsolute" onclick="clearRawDataFrequencies();">
+                                    <label class="form-check-label" for="frequencyDataAbsolute" lang="en">Absolute Frequencies</label>
+                                </div>
+<!--
+                                <div class="form-check form-check-inline" style="margin-top: 7px;">
+                                    <input class="form-check-input" type="radio" name="rawData" id="frequencyDataRelative" value="frequencyDataRelative" onclick="clearRawDataFrequencies();">
+                                    <label class="form-check-label" for="frequencyDataRelative" lang="en">Relative Frequencies</label>
+                                </div>
+-->
+                            </div>
+                        </div>
+
                         <table class="table">
                             <thead>
                                 <tr>
@@ -74,6 +92,12 @@
                                     <th>
                                         <input type="text" name="yLabel" id="yLabel" value="" class="form-control" placeholder="Var Y"/>
                                     </th>
+                                    <th colspan="2"></th>
+                                </tr>
+                                <tr>
+                                    <th lang="en">Value</th>
+                                    <th lang="en">Value</th>
+                                    <th lang="en">Frequency</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -82,17 +106,36 @@
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <button onclick="return addRow();" class="btn btn-outline-secondary" lang="en">Add Row</button>
+                                    <td colspan="5">
+                                        <button onclick="return addRow();" class="btn btn-outline-secondary" lang="en">Add Row</button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
 
                         <div class="mb-3 row">
-                            <button onclick="return calculateStats();" class="btn btn-primary btn-lg btn-block" lang="en">Calculate</button>
+                            <input type="submit" class="btn btn-primary btn-lg btn-block" value="Calculate"/>
                         </div>
                     </form>
                 </div>
-                <div class="tab-pane fade" id="nav-frequencies" role="tabpanel" aria-labelledby="nav-frequencies-tab">...</div>
+                <div class="tab-pane fade" id="nav-frequencies" role="tabpanel" aria-labelledby="nav-frequencies-tab">
+                    <div class="container" style="margin-top: 50px;" id="frequencyDiv">
+                    </div>
+
+                    <h2 id="frequencyLabel" lang="en" style="display: none">Variable</h2>
+                    <table id="frequencyDivTable" class="table" style="display: none">
+                        <thead>
+                        <tr>
+                            <th lang="en">Value</th>
+                            <th lang="en">Absolute Frequency</th>
+                            <th lang="en">Relative Frequency</th>
+                            <th lang="en">Accumulated Absolute Frequency</th>
+                            <th lang="en">Accumulated Relative Frequency</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
                 <div class="tab-pane fade" id="nav-results" role="tabpanel" aria-labelledby="nav-results-tab">
                     <div class="container" style="margin-top: 50px;">
                         <h3 lang="en">Statistics</h3>
@@ -207,6 +250,12 @@
         </div>
     </main>
 
+    <footer style="text-align: center;">
+        <script>document.write(new Date().getFullYear())</script>
+        &copy;
+        <a href="https://github.com/opencodemonkey">opencodemonkey</a>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
             crossorigin="anonymous"></script>
@@ -228,18 +277,22 @@
     }
 
     function calculateStats() {
+        document.getElementById('frequencyDiv').innerHTML = '';
         clearRows("basicStats");
         clearRows("percentileStats");
         clearRows("dispursionStats");
 
         var xl = document.getElementById("xLabel").value;
+        var frequencyA = Array.from(document.getElementsByName("frequency")).map(x => +x.value);
         var xa = Array.from(document.getElementsByName("x")).map(x => +x.value);
+        var xdata = resolve(frequencyA, xa);
         var ya = Array.from(document.getElementsByName("y")).map(x => +x.value);
 
-        report("X", xl, xa);
+        report("X", xl, xdata);
         if (hasValues(ya) === true) {
             var yl = document.getElementById("yLabel").value;
-            report("Y", yl, ya);
+            var ydata = resolve(frequencyA, ya);
+            report("Y", yl, ydata);
 
             document.getElementById('sampleCorrelation').innerHTML = sampleCorrelation(xa, ya);
             document.getElementById('sampleCovariance').innerHTML = sampleCovariance(xa, ya);
@@ -255,13 +308,23 @@
             drawRegressionLine(xa, ya, sdata);
         }
 
-        // document.getElementById("nav-frequencies-tab").classList.remove("disabled");
+        document.getElementById("nav-frequencies-tab").classList.remove("disabled");
         document.getElementById("nav-results-tab").classList.remove("disabled");
         document.getElementById("nav-box-tab").classList.remove("disabled");
         document.getElementById("nav-regression-tab").classList.remove("disabled");
         document.getElementById("nav-results-tab").click();
 
         return false;
+    }
+
+    function resolve(frequencies, values) {
+        var data = [];
+        frequencies.forEach((f, i) => {
+            for (j = 0; j < f; j++) {
+                data.push(values[i]);
+            }
+        });
+        return data;
     }
 
     function hasValues(arr) {
@@ -322,7 +385,49 @@
 
     }
 
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
+
+    function count(array, val) {
+        var c = 0;
+        for(var i = 0; i < array.length; ++i){
+            if(array[i] === val)
+                c++;
+        }
+        return c;
+    }
+
     function report(vi, vlabel, vdata) {
+        var frequencyDiv = document.getElementById('frequencyDiv');
+        var frequencyDivTable = document.getElementById('frequencyDivTable');
+        var fTable = frequencyDivTable.cloneNode(true);
+        fTable.style.display = "block";
+        fTable.id = "frequencyDivTable" + (Math.random() * 1000);
+
+        var values = vdata.filter(onlyUnique).sort((a,b) => a-b);
+        var counts = [];
+        values.forEach(v => {
+            counts.push(count(vdata, v))
+        });
+
+        var accumulated = 0;
+        for (var i = 0; i < values.length; i++) {
+            var trow = fTable.tBodies[0].insertRow();
+            accumulated += counts[i];
+            trow.insertCell().innerHTML = values[i];
+            trow.insertCell().innerHTML = counts[i];
+            trow.insertCell().innerHTML = (counts[i] / vdata.length).toFixed(3);
+            trow.insertCell().innerHTML = accumulated
+            trow.insertCell().innerHTML = (accumulated / vdata.length).toFixed(3);
+        }
+        var label = document.getElementById('frequencyLabel').cloneNode(true);
+        label.id = "frequencyDivTable" + (Math.random() * 1000);
+        label.style.display = "block";
+        label.innerHTML += ' ' + vlabel;
+        frequencyDiv.appendChild(label);
+        frequencyDiv.appendChild(fTable);
+
         var trow = document.getElementById('basicStats').insertRow();
         trow.insertCell().innerHTML = vlabel;
         trow.insertCell().innerHTML = vdata.length;
@@ -350,10 +455,10 @@
 
         var drow = document.getElementById('dispursionStats').insertRow();
         drow.insertCell().innerHTML = vlabel;
-        drow.insertCell().innerHTML = document.getElementById('population').checked ? variance(vdata) : sampleVariance(vdata);
-        drow.insertCell().innerHTML = document.getElementById('population').checked ? standardDeviation(vdata) : sampleStandardDeviation(vdata);
-        drow.insertCell().innerHTML = medianAbsoluteDeviation(vdata);
-        drow.insertCell().innerHTML = interquartileRange(vdata);
+        drow.insertCell().innerHTML = (document.getElementById('population').checked ? variance(vdata) : sampleVariance(vdata)).toFixed(3);
+        drow.insertCell().innerHTML = (document.getElementById('population').checked ? standardDeviation(vdata) : sampleStandardDeviation(vdata)).toFixed(3);
+        drow.insertCell().innerHTML = (medianAbsoluteDeviation(vdata)).toFixed(3);
+        drow.insertCell().innerHTML = (interquartileRange(vdata)).toFixed(3);
 
         Highcharts.chart('boxPlotContainer' + vi, {
             chart: { type: 'boxplot' },
@@ -390,10 +495,37 @@
     }
 
     function addRow() {
+        var isRawData = document.getElementById("rawData").checked;
         var trow = tbody.insertRow();
-        trow.insertCell().innerHTML = '<input type="number" name="x" value="" class="form-control"/>';
-        trow.insertCell().innerHTML = '<input type="number" name="y" value="" class="form-control"/>';
+        trow.insertCell().innerHTML = '<input type="number" name="x" value="" class="form-control" required />';
+        if (isRawData) {
+            trow.insertCell().innerHTML = '<input type="number" name="y" value="" class="form-control" required />';
+            trow.insertCell().innerHTML = '<input type="number" name="frequency" value="1" class="form-control" required />';
+        } else {
+            trow.insertCell().innerHTML = '<input type="number" name="y" value="0" class="form-control" required />';
+            trow.insertCell().innerHTML = '<input type="number" name="frequency" value="" class="form-control" required />';
+        }
         trow.insertCell().innerHTML = '<button onclick="removeRow(this);" class="btn btn-outline-danger">' + trash + '</button>';
+        return false;
+    }
+
+    function initRawDataFrequencies() {
+        document.getElementsByName("frequency").forEach((element) => {
+            element.value = 1;
+        });
+        document.getElementsByName("y").forEach((element) => {
+            element.value = '';
+        });
+        return false;
+    }
+
+    function clearRawDataFrequencies() {
+        document.getElementsByName("frequency").forEach((element) => {
+            element.value = '';
+        });
+        document.getElementsByName("y").forEach((element) => {
+            element.value = 0;
+        });
         return false;
     }
 
@@ -434,6 +566,16 @@
         if (text === "Correlation") return "Correlação";
         if (text === "Covariance") return "Covariancia";
         if (text === "Linear Regression") return "Regressão Linear";
+        if (text === "Input Mode") return "Formato Dados";
+        if (text === "Raw Data") return "Dados em Bruto";
+        if (text === "Absolute Frequencies") return "Frequências Absolutas";
+        if (text === "Relative Frequencies") return "Frequências Relativas";
+        if (text === "Value") return "Valor";
+        if (text === "Frequency") return "Frequência";
+        if (text === "Absolute Frequency") return "Frequência Absoluta";
+        if (text === "Relative Frequency") return "Frequência Relativa";
+        if (text === "Accumulated Absolute Frequency") return "Frequência Absoluta Acumulada";
+        if (text === "Accumulated Relative Frequency") return "Frequência Relativa Acumulada";
         if (text === "") return "";
 
         alert("No translation for [" + text + "]");
