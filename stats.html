@@ -298,14 +298,14 @@
             document.getElementById('sampleCovariance').innerHTML = sampleCovariance(xa, ya);
 
             var sdata = [];
-            for (i = 0; i < xa.length; i++) {
-                sdata.push([xa[i], ya[i]]);
+            for (i = 0; i < xdata.length; i++) {
+                sdata.push([xdata[i], ydata[i]]);
             }
             var lr = linearRegression(sdata);
             document.getElementById('linearRegression').innerHTML = 'm = ' + lr.m + " ; b = " + lr.b;
             document.getElementById('linearRegressionLine').innerHTML = linearRegressionLine(sdata);
 
-            drawRegressionLine(xa, ya, sdata);
+            drawRegressionLine(xdata, ydata, sdata);
         }
 
         document.getElementById("nav-frequencies-tab").classList.remove("disabled");
