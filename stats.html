@@ -194,6 +194,20 @@
                             <tbody id="dispursionStats">
                             </tbody>
                         </table>
+
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th lang="en">Variable</th>
+                                <th lang="en">Outlier Interval</th>
+                                <th lang="en">Extreme Outlier Interval</th>
+                                <th lang="en">Outliers</th>
+                                <th lang="en">Extreme Outliers</th>
+                            </tr>
+                            </thead>
+                            <tbody id="outlierStats">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-box" role="tabpanel" aria-labelledby="nav-box-tab">
@@ -286,6 +300,7 @@
         clearRows("basicStats");
         clearRows("percentileStats");
         clearRows("dispursionStats");
+        clearRows("outlierStats");
 
         var xl = document.getElementById("xLabel").value;
         var frequencyA = Array.from(document.getElementsByName("frequency")).map(x => +x.value);
@@ -314,12 +329,14 @@
             document.getElementById('linearRegressionFormula').innerHTML = 'y = a + bx = ' + lr.b.toFixed(3) + " + " + lr.m.toFixed(3) + " x";
 
             drawRegressionLine(xdata, ydata, sdata);
+
+            document.getElementById("nav-regression-tab").classList.remove("disabled");
         }
 
         document.getElementById("nav-frequencies-tab").classList.remove("disabled");
         document.getElementById("nav-results-tab").classList.remove("disabled");
         document.getElementById("nav-box-tab").classList.remove("disabled");
-        document.getElementById("nav-regression-tab").classList.remove("disabled");
+
         document.getElementById("nav-results-tab").click();
 
         return false;
@@ -443,11 +460,13 @@
         trow.insertCell().innerHTML = min(vdata).toFixed(3);
         trow.insertCell().innerHTML = max(vdata).toFixed(3);
 
+        var q1 = quantile(vdata, 0.25);
+        var q3 = quantile(vdata, 0.75);
         trow.insertCell().innerHTML = mean(vdata).toFixed(3);
         trow.insertCell().innerHTML = mode(vdata).toFixed(3);
         trow.insertCell().innerHTML = median(vdata).toFixed(3);
-        trow.insertCell().innerHTML = quantile(vdata, 0.25).toFixed(3);
-        trow.insertCell().innerHTML = quantile(vdata, 0.75).toFixed(3);
+        trow.insertCell().innerHTML = q1.toFixed(3);
+        trow.insertCell().innerHTML = q3.toFixed(3);
 
         var prow = document.getElementById('percentileStats').insertRow();
         prow.insertCell().innerHTML = vlabel;
@@ -465,12 +484,36 @@
         var sd = document.getElementById('population').checked ? standardDeviation(vdata) : sampleStandardDeviation(vdata);
         var cv = sd / mean(vdata);
         var drow = document.getElementById('dispursionStats').insertRow();
+        var iqr = interquartileRange(vdata);
         drow.insertCell().innerHTML = vlabel;
         drow.insertCell().innerHTML = v.toFixed(3);
         drow.insertCell().innerHTML = sd.toFixed(3);
         drow.insertCell().innerHTML = (medianAbsoluteDeviation(vdata)).toFixed(3);
-        drow.insertCell().innerHTML = (interquartileRange(vdata)).toFixed(3);
+        drow.insertCell().innerHTML = iqr.toFixed(3);
         drow.insertCell().innerHTML = cv.toFixed(3);
+
+        var oimin = q1 - 1.5*iqr;
+        var oimax = q3 + 1.5*iqr;
+        var eoimin = q1 - 3*iqr;
+        var eoimax = q3 + 3*iqr;
+
+        var ol = [];
+        var eol = [];
+        values.forEach(v => {
+            if (v < oimin || v > oimax) {
+                ol.push(v);
+            }
+            if (v < eoimin || v > eoimax) {
+                eol.push(v);
+            }
+        });
+
+        var orow = document.getElementById('outlierStats').insertRow();
+        orow.insertCell().innerHTML = vlabel;
+        orow.insertCell().innerHTML = '[' + oimin + "; " + oimax + ']';
+        orow.insertCell().innerHTML = '[' + eoimin + "; " + eoimax + ']';
+        orow.insertCell().innerHTML = ol;
+        orow.insertCell().innerHTML = eol;
 
         Highcharts.chart('boxPlotContainer' + vi, {
             chart: { type: 'boxplot' },
@@ -511,7 +554,7 @@
         var trow = tbody.insertRow();
         trow.insertCell().innerHTML = '<input type="number" name="x" value="" class="form-control" required />';
         if (isRawData) {
-            trow.insertCell().innerHTML = '<input type="number" name="y" value="" class="form-control" required step="0.001" />';
+            trow.insertCell().innerHTML = '<input type="number" name="y" value="" class="form-control" step="0.001" />';
             trow.insertCell().innerHTML = '<input type="number" name="frequency" value="1" class="form-control" required />';
         } else {
             trow.insertCell().innerHTML = '<input type="number" name="y" value="0" class="form-control" required />';
@@ -590,6 +633,10 @@
         if (text === "Accumulated Relative Frequency") return "Frequência Relativa Acumulada";
         if (text === "Coefficient of Variation") return "Coeficiente de Variação";
         if (text === "Line Formula") return "Fórmula da Reta de Regressão";
+        if (text === "Outlier Interval") return "Intervalo Outliers";
+        if (text === "Extreme Outlier Interval") return "Intervalo Outliers Extremos";
+        if (text === "Outliers") return "Outliers";
+        if (text === "Extreme Outliers") return "Outliers Extremos";
 
         if (text === "") return "";
 
