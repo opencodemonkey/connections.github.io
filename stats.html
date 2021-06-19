@@ -188,6 +188,7 @@
                                 <th lang="en">Standard Deviation</th>
                                 <th lang="en">Median Absolute Deviation</th>
                                 <th lang="en">InterQuantile Range</th>
+                                <th lang="en">Coefficient of Variation</th>
                             </tr>
                             </thead>
                             <tbody id="dispursionStats">
@@ -215,14 +216,16 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th lang="en">Correlation</th>
+                                    <th lang="en">Correlation (R)</th>
                                     <th lang="en">Covariance</th>
+                                    <th>R&#178</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td id="sampleCorrelation"></td>
                                     <td id="sampleCovariance"></td>
+                                    <td id="sampleCorrelationCoeficient"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -231,14 +234,16 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>linerarRegression</th>
-                                    <th>linerarRegressionLine</th>
+                                    <th>a</th>
+                                    <th>b</th>
+                                    <th lang="en">Line Formula</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td id="linearRegression"></td>
-                                    <td id="linearRegressionLine"></td>
+                                    <td id="linearRegressionA"></td>
+                                    <td id="linearRegressionB"></td>
+                                    <td id="linearRegressionFormula"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -294,16 +299,19 @@
             var ydata = resolve(frequencyA, ya);
             report("Y", yl, ydata);
 
-            document.getElementById('sampleCorrelation').innerHTML = sampleCorrelation(xa, ya);
-            document.getElementById('sampleCovariance').innerHTML = sampleCovariance(xa, ya);
+            var sc = sampleCorrelation(xa, ya);
+            document.getElementById('sampleCorrelation').innerHTML = sc.toFixed(3);
+            document.getElementById('sampleCovariance').innerHTML = sampleCovariance(xa, ya).toFixed(3);
+            document.getElementById('sampleCorrelationCoeficient').innerHTML = Math.pow(sc, 2).toFixed(3);
 
             var sdata = [];
             for (i = 0; i < xdata.length; i++) {
                 sdata.push([xdata[i], ydata[i]]);
             }
             var lr = linearRegression(sdata);
-            document.getElementById('linearRegression').innerHTML = 'm = ' + lr.m + " ; b = " + lr.b;
-            document.getElementById('linearRegressionLine').innerHTML = linearRegressionLine(sdata);
+            document.getElementById('linearRegressionA').innerHTML = lr.b.toFixed(3);
+            document.getElementById('linearRegressionB').innerHTML = lr.m.toFixed(3);
+            document.getElementById('linearRegressionFormula').innerHTML = 'y = a + bx = ' + lr.b.toFixed(3) + " + " + lr.m.toFixed(3) + " x";
 
             drawRegressionLine(xdata, ydata, sdata);
         }
@@ -431,34 +439,38 @@
         var trow = document.getElementById('basicStats').insertRow();
         trow.insertCell().innerHTML = vlabel;
         trow.insertCell().innerHTML = vdata.length;
-        trow.insertCell().innerHTML = sum(vdata);
-        trow.insertCell().innerHTML = min(vdata);
-        trow.insertCell().innerHTML = max(vdata);
+        trow.insertCell().innerHTML = sum(vdata).toFixed(3);
+        trow.insertCell().innerHTML = min(vdata).toFixed(3);
+        trow.insertCell().innerHTML = max(vdata).toFixed(3);
 
-        trow.insertCell().innerHTML = mean(vdata);
-        trow.insertCell().innerHTML = mode(vdata);
-        trow.insertCell().innerHTML = median(vdata);
-        trow.insertCell().innerHTML = quantile(vdata, 0.25);
-        trow.insertCell().innerHTML = quantile(vdata, 0.75);
+        trow.insertCell().innerHTML = mean(vdata).toFixed(3);
+        trow.insertCell().innerHTML = mode(vdata).toFixed(3);
+        trow.insertCell().innerHTML = median(vdata).toFixed(3);
+        trow.insertCell().innerHTML = quantile(vdata, 0.25).toFixed(3);
+        trow.insertCell().innerHTML = quantile(vdata, 0.75).toFixed(3);
 
         var prow = document.getElementById('percentileStats').insertRow();
         prow.insertCell().innerHTML = vlabel;
-        prow.insertCell().innerHTML = quantile(vdata, 0.1);
-        prow.insertCell().innerHTML = quantile(vdata, 0.2);
-        prow.insertCell().innerHTML = quantile(vdata, 0.3);
-        prow.insertCell().innerHTML = quantile(vdata, 0.4);
-        prow.insertCell().innerHTML = quantile(vdata, 0.5);
-        prow.insertCell().innerHTML = quantile(vdata, 0.6);
-        prow.insertCell().innerHTML = quantile(vdata, 0.7);
-        prow.insertCell().innerHTML = quantile(vdata, 0.8);
-        prow.insertCell().innerHTML = quantile(vdata, 0.9);
+        prow.insertCell().innerHTML = quantile(vdata, 0.1).toFixed(3);
+        prow.insertCell().innerHTML = quantile(vdata, 0.2).toFixed(3);
+        prow.insertCell().innerHTML = quantile(vdata, 0.3).toFixed(3);
+        prow.insertCell().innerHTML = quantile(vdata, 0.4).toFixed(3);
+        prow.insertCell().innerHTML = quantile(vdata, 0.5).toFixed(3);
+        prow.insertCell().innerHTML = quantile(vdata, 0.6).toFixed(3);
+        prow.insertCell().innerHTML = quantile(vdata, 0.7).toFixed(3);
+        prow.insertCell().innerHTML = quantile(vdata, 0.8).toFixed(3);
+        prow.insertCell().innerHTML = quantile(vdata, 0.9).toFixed(3);
 
+        var v = document.getElementById('population').checked ? variance(vdata) : sampleVariance(vdata);
+        var sd = document.getElementById('population').checked ? standardDeviation(vdata) : sampleStandardDeviation(vdata);
+        var cv = sd / mean(vdata);
         var drow = document.getElementById('dispursionStats').insertRow();
         drow.insertCell().innerHTML = vlabel;
-        drow.insertCell().innerHTML = (document.getElementById('population').checked ? variance(vdata) : sampleVariance(vdata)).toFixed(3);
-        drow.insertCell().innerHTML = (document.getElementById('population').checked ? standardDeviation(vdata) : sampleStandardDeviation(vdata)).toFixed(3);
+        drow.insertCell().innerHTML = v.toFixed(3);
+        drow.insertCell().innerHTML = sd.toFixed(3);
         drow.insertCell().innerHTML = (medianAbsoluteDeviation(vdata)).toFixed(3);
         drow.insertCell().innerHTML = (interquartileRange(vdata)).toFixed(3);
+        drow.insertCell().innerHTML = cv.toFixed(3);
 
         Highcharts.chart('boxPlotContainer' + vi, {
             chart: { type: 'boxplot' },
@@ -499,7 +511,7 @@
         var trow = tbody.insertRow();
         trow.insertCell().innerHTML = '<input type="number" name="x" value="" class="form-control" required />';
         if (isRawData) {
-            trow.insertCell().innerHTML = '<input type="number" name="y" value="" class="form-control" required />';
+            trow.insertCell().innerHTML = '<input type="number" name="y" value="" class="form-control" required step="0.001" />';
             trow.insertCell().innerHTML = '<input type="number" name="frequency" value="1" class="form-control" required />';
         } else {
             trow.insertCell().innerHTML = '<input type="number" name="y" value="0" class="form-control" required />';
@@ -563,7 +575,7 @@
         if (text === "Median Absolute Deviation") return "Desvio Absoluto da Mediana";
         if (text === "InterQuantile Range") return "Distância Interquartil";
         if (text === "Similarity") return "Comparação";
-        if (text === "Correlation") return "Correlação";
+        if (text === "Correlation (R)") return "Correlação (R)";
         if (text === "Covariance") return "Covariancia";
         if (text === "Linear Regression") return "Regressão Linear";
         if (text === "Input Mode") return "Formato Dados";
@@ -576,6 +588,9 @@
         if (text === "Relative Frequency") return "Frequência Relativa";
         if (text === "Accumulated Absolute Frequency") return "Frequência Absoluta Acumulada";
         if (text === "Accumulated Relative Frequency") return "Frequência Relativa Acumulada";
+        if (text === "Coefficient of Variation") return "Coeficiente de Variação";
+        if (text === "Line Formula") return "Fórmula da Reta de Regressão";
+
         if (text === "") return "";
 
         alert("No translation for [" + text + "]");
