@@ -650,6 +650,10 @@
         return lang && ("pt" === lang || "PT" === lang);
     }
 
+    if (new URLSearchParams(window.location.search).get("lang")) {
+        alert("Current navigator.language = " + navigator.language);
+    }
+
     if (navigator.language === "pt" || navigator.language === "PT" || isPTParam()) {
         document.querySelectorAll("[lang]").forEach((element) => {
             if (element.parentElement != null && element.text != null) {
