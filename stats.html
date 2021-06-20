@@ -644,7 +644,13 @@
         return text;
     }
 
-    if (navigator.language === "pt") {
+    function isPTParam() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const lang = urlParams.get('lang');
+        return lang && ("pt" === lang || "PT" === lang);
+    }
+
+    if (navigator.language === "pt" || navigator.language === "PT" || isPTParam()) {
         document.querySelectorAll("[lang]").forEach((element) => {
             if (element.parentElement != null && element.text != null) {
                 element.text = translate(element.text);
