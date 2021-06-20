@@ -644,17 +644,7 @@
         return text;
     }
 
-    function isPTParam() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const lang = urlParams.get('lang');
-        return lang && ("pt" === lang || "PT" === lang);
-    }
-
-    if (new URLSearchParams(window.location.search).get("lang")) {
-        alert("Current navigator.language = " + navigator.language);
-    }
-
-    if (navigator.language === "pt" || navigator.language === "PT" || isPTParam()) {
+    if (navigator.language && (navigator.language.startsWith("pt") || navigator.language.startsWith("PT"))) {
         document.querySelectorAll("[lang]").forEach((element) => {
             if (element.parentElement != null && element.text != null) {
                 element.text = translate(element.text);
